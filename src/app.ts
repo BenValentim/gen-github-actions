@@ -1,19 +1,34 @@
-import express from 'express';
+import fs from 'fs';
+import path from 'path';
 
-async function startServer() {
-  const app = express();
+const from = '.github/models';
+const destiny = '.github/workflows';
 
-  app.use(express.json());
+const cliFunctions: any = {
+  generate: (workspaces: string[]) => {
+    try {
+      const files = fs.readdirSync(from);
 
-  app.use('/api');
+      files.forEach((modelName: string) => {
+        const fileContent = fs.readFileSync(`${from}/${modelName}`, 'utf-8');
+        const lines = fileContent.split(/\r?\n/);
 
-  const port = process.env.PORT || 3000;
+        for (let index = 0; index < workspaces.length; index++) {
+          const envType = workspaces[index];
 
-  app.listen(port, () => {
-    console.log(`Server runing port ${port}`);
-  });
+          const modifiedLines = lines.map((line: string) => {
+            return line.replace(/<WORKSPACE>/g, envType);
+          });
+
+          const modifiedContent = modifiedLines.join('\n');
+          const destinyFile = path.join(destiny, `${envType}-${modelName}`);
+          fs.writeFileSync(destinyFile, modifiedContent);
+
+          console.log(`Workflow file created at ${destinyFile}`);
+        }
+      });
+    } catch (error) {
+      console.error('Error creating workflow file:', error);
+    }
+  }
 }
-
-startServer().catch((err) => {
-  console.error('Error starting the server:', err);
-});
