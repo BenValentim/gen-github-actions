@@ -7,8 +7,8 @@ jobs:
     runs-on: self-hosted
     environment: <WORKSPACE>
     steps:
-      - name: "Apply env"
-        run: cd <PATH>
+      - name: "<ENV_TASK_NAME>"
+        run: cd <SERVER_PATH>
           && touch .env-<WORKSPACE>
           && rm .env-<WORKSPACE>
           && touch .env-<WORKSPACE>
