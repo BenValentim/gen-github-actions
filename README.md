@@ -14,7 +14,7 @@ yarn install gen-github-actions
 
 ## How to Use
 After installing the package, you can use the generate command followed by an array of environments for which the files will be generated and whether to use the variables from your env-sample and env-ci=sample. For example:
-
+```javascript
 genActions.generate([
 {
 "<WORKSPACE>": "dev",
@@ -27,6 +27,7 @@ genActions.generate([
 "<TASK_NAME>": "fill env main"
 }
 ], true, true);
+```
 
 ## Contribution
 If you encounter any issues or have suggestions for improvement, feel free to open an issue in this repository. We welcome contributions from all levels of experience.
