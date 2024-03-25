@@ -1,6 +1,6 @@
 {
   "name": "gen-github-actions",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Automatically generate GitHub workflow actions based on model",
   "main": "index.js",
   "scripts": {
