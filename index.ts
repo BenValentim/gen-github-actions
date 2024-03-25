@@ -89,7 +89,7 @@ function fillLines(lines: string[], envType: string, values: any, useEnvSample: 
   return modifiedLines;
 }
 
-const genActions: any = {
+const genActions = {
   generate: (params: { [key: string]: string }[], useEnvSample: boolean, useCiSample: boolean) => {
     console.log('Starting generate...')
     try {
@@ -141,3 +141,5 @@ genActions.generate([
     "<WORKSPACE>": "main"
   }
 ], true, true);
+
+export default genActions;

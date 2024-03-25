@@ -1,8 +1,8 @@
 {
   "name": "gen-github-actions",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "Automatically generate GitHub workflow actions based on model",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "build": "npx tsc",
     "start": "ts-node index.ts"
@@ -32,6 +32,6 @@
     "typescript": "^5.4.3"
   },
   "bin": {
-    "gen-github-actions": "build/index.js"
+    "gen-github-actions": "index.ts"
   }
 }
