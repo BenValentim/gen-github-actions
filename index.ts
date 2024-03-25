@@ -1,8 +1,9 @@
 import fs from 'fs';
 import path from 'path';
 
-const from = '.github/models';
-const destiny = '.github/workflows';
+const basePath = `.github`;
+const from = `${basePath}/models`;
+const destiny = `${basePath}/workflows`;
 
 const validateWorkspaces = (workspaces: { [key: string]: string }[]): boolean => {
   const allKeys = new Set<string>();
@@ -90,10 +91,19 @@ function fillLines(lines: string[], envType: string, values: any, useEnvSample: 
 
 const genActions: any = {
   generate: (params: { [key: string]: string }[], useEnvSample: boolean, useCiSample: boolean) => {
+    console.log('Starting generate...')
     try {
       if (!validateWorkspaces(params)) {
         console.error('Error: Invalid parameters in workspaces array');
         return;
+      }
+
+      if (!fs.existsSync(basePath)) {
+        fs.mkdirSync(basePath);
+      }
+
+      if (!fs.existsSync(from)) {
+        fs.mkdirSync(from);
       }
 
       const files = fs.readdirSync(from);
@@ -106,6 +116,11 @@ const genActions: any = {
           const envType = values['<WORKSPACE>'];
           const modifiedLines = fillLines(lines, envType, values, useEnvSample, useCiSample);
           const modifiedContent = modifiedLines.join('\n');
+
+          if (!fs.existsSync(destiny)) {
+            fs.mkdirSync(destiny);
+          }
+
           const destinyFile = path.join(destiny, `${envType}-${modelName}`);
           fs.writeFileSync(destinyFile, modifiedContent);
           console.log(`Workflow file created at ${destinyFile}`);
@@ -114,22 +129,15 @@ const genActions: any = {
     } catch (error) {
       console.error('Error creating workflow file:', error);
     }
+    console.log('Generate ended')
   }
 }
 
 genActions.generate([
   {
-    "<WORKSPACE>": "dev",
-    "<SERVER_PATH>": "/test/url/",
-    "<ENV_TASK_NAME>": "fill env dev",
-    "<TEST_TASK_NAME>": "test dev",
-    "<CREDENTIALS>": "1234"
+    "<WORKSPACE>": "dev"
   },
   {
-    "<WORKSPACE>": "main",
-    "<SERVER_PATH>": "/test-main/url/",
-    "<ENV_TASK_NAME>": "fill env main",
-    "<TEST_TASK_NAME>": "test main",
-    "<CREDENTIALS>": "5678"
+    "<WORKSPACE>": "main"
   }
 ], true, true);
