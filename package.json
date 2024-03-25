@@ -4,7 +4,7 @@
   "description": "Automatically generate GitHub workflow actions based on model",
   "main": "index.js",
   "scripts": {
-    "build": "tsc",
+    "build": "npx tsc",
     "start": "ts-node index.ts"
   },
   "repository": {
