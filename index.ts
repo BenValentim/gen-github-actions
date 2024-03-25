@@ -1,3 +1,4 @@
+#! /usr/bin/env node
 import fs from 'fs';
 import path from 'path';
 
@@ -89,10 +90,22 @@ function fillLines(lines: string[], envType: string, values: any, useEnvSample: 
   return modifiedLines;
 }
 
-const genActions = {
-  generate: (params: { [key: string]: string }[], useEnvSample: boolean, useCiSample: boolean) => {
+const genActions: any = {
+  generate: (params: { [key: string]: string }[], useEnvSample: boolean = true, useCiSample: boolean = true) => {
     console.log('Starting generate...')
+
     try {
+      if (!params) {
+        params = [
+          {
+            "<WORKSPACE>": "dev"
+          },
+          {
+            "<WORKSPACE>": "main"
+          }
+        ];
+      }
+
       if (!validateWorkspaces(params)) {
         console.error('Error: Invalid parameters in workspaces array');
         return;
@@ -129,17 +142,10 @@ const genActions = {
     } catch (error) {
       console.error('Error creating workflow file:', error);
     }
+    
     console.log('Generate ended')
   }
 }
 
-genActions.generate([
-  {
-    "<WORKSPACE>": "dev"
-  },
-  {
-    "<WORKSPACE>": "main"
-  }
-], true, true);
-
-export default genActions;
+const cliArgs = process.argv.slice(2)
+genActions[cliArgs[0]]();
