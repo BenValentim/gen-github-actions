@@ -32,6 +32,6 @@
     "typescript": "^5.4.3"
   },
   "bin": {
-    "gen-github-actions": "index.js"
+    "gen-github-actions": "build/index.js"
   }
 }
