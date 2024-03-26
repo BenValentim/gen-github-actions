@@ -67,8 +67,17 @@ function processEnvFile(modifiedLines: string[], envFileName: string, envType: s
         const varPrefix = envLine.split('.');
 
         if (varPrefix.length > 1) {
-          const varName = varPrefix[1].split('=')[0];
-          modifiedLines.splice(index, 0, `          && echo ${varName}=\${{ ${varPrefix[0]}.${varName} }} >> .env-${envType}`);
+          const varName = varPrefix[1].split('=')[0].replace(/\s/g, '');
+
+          if (varName.length > 0) {
+            modifiedLines.splice(index, 0, `          && echo ${varName}=\${{ ${varPrefix[0]}.${varName} }} >> .env-${envType}`);
+          }
+        } else if (varPrefix.length == 1 && envLine) {
+          const varName = envLine.split('=')[0].replace(/\s/g, '');
+
+          if (varName.length > 0) {
+            modifiedLines.splice(index, 0, `          && echo ${varName}=\${{ ${varName} }} >> .env-${envType}`);
+          }
         }
       });
       foundIndex = -1;
