@@ -7,9 +7,9 @@ const from = `${basePath}/models`;
 const destiny = `${basePath}/workflows`;
 const envCiSamplePath = path.resolve('.env-ci-sample');
 const envSamplePath = path.resolve('.env-sample');
-const envCiSampleTemplatePath = path.resolve('files/.env-ci-sample');
-const envSampleTemplatePath = path.resolve('files/.env-sample');
-const modelsTemplatePath = 'files/models';
+const envCiSampleTemplatePath = path.resolve(__dirname, '../files', '.env-ci-sample');
+const envSampleTemplatePath = path.resolve(__dirname, '../files', '.env-sample');
+const modelsTemplatePath = path.resolve(__dirname, '../files', 'models');
 
 const validateWorkspaces = (workspaces: { [key: string]: string }[]): boolean => {
   const allKeys = new Set<string>();
@@ -179,7 +179,7 @@ const genActions: any = {
 
 const cliArgs = process.argv.slice(2);
 
-if(cliArgs.length > 0){
+if (cliArgs.length > 0) {
   genActions[cliArgs[0]]();
 }
 

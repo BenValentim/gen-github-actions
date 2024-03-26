@@ -9,7 +9,7 @@ npm install gen-github-actions
 ```
 or
 ```bash
-yarn install gen-github-actions
+yarn add gen-github-actions
 ```
 
 ## How to Use
