@@ -141,12 +141,14 @@ const genActions: any = {
         fs.mkdirSync(from);
       }
 
-      const files = fs.readdirSync(from);
+      let files = fs.readdirSync(from);
 
       if (files.length == 0) {
         generateFiles(`${modelsTemplatePath}/docker.yml`, `${from}/docker.yml`);
         generateFiles(`${modelsTemplatePath}/env.yml`, `${from}/env.yml`);
         generateFiles(`${modelsTemplatePath}/test.yml`, `${from}/test.yml`);
+
+        files = fs.readdirSync(from);
       }
 
       files.forEach((modelName: string) => {
