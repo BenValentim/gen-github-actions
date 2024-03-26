@@ -5,6 +5,11 @@ import path from 'path';
 const basePath = `.github`;
 const from = `${basePath}/models`;
 const destiny = `${basePath}/workflows`;
+const envCiSamplePath = path.resolve('.env-ci-sample');
+const envSamplePath = path.resolve('.env-sample');
+const envCiSampleTemplatePath = path.resolve('files/.env-ci-sample');
+const envSampleTemplatePath = path.resolve('files/.env-sample');
+const modelsTemplatePath = 'files/models';
 
 const validateWorkspaces = (workspaces: { [key: string]: string }[]): boolean => {
   const allKeys = new Set<string>();
@@ -35,6 +40,11 @@ const validateWorkspaces = (workspaces: { [key: string]: string }[]): boolean =>
 
 const isValidParameter = (parameter: string): boolean => {
   return parameter.startsWith('<') && parameter.endsWith('>');
+}
+
+function generateFiles(readPath: string, writePath: string) {
+  const templateContent = fs.readFileSync(readPath, 'utf-8');
+  fs.writeFileSync(writePath, templateContent);
 }
 
 function processEnvFile(modifiedLines: string[], envFileName: string, envType: string): string[] {
@@ -80,11 +90,23 @@ function fillLines(lines: string[], envType: string, values: any, useEnvSample: 
   });
 
   if (useCiSample) {
-    modifiedLines = processEnvFile(modifiedLines, '.env-ci-sample', envType);
+    const verifyPath = path.resolve(envCiSamplePath);
+
+    if (!fs.existsSync(verifyPath)) {
+      generateFiles(envCiSampleTemplatePath, envCiSamplePath);
+    }
+
+    modifiedLines = processEnvFile(modifiedLines, envCiSamplePath, envType);
   }
 
   if (useEnvSample) {
-    modifiedLines = processEnvFile(modifiedLines, '.env-sample', envType);
+    const verifyPath = path.resolve(envSamplePath);
+
+    if (!fs.existsSync(verifyPath)) {
+      generateFiles(envSampleTemplatePath, envSamplePath);
+    }
+
+    modifiedLines = processEnvFile(modifiedLines, envSamplePath, envType);
   }
 
   return modifiedLines;
@@ -121,6 +143,12 @@ const genActions: any = {
 
       const files = fs.readdirSync(from);
 
+      if (files.length == 0) {
+        generateFiles(`${modelsTemplatePath}/docker.yml`, `${from}/docker.yml`);
+        generateFiles(`${modelsTemplatePath}/env.yml`, `${from}/env.yml`);
+        generateFiles(`${modelsTemplatePath}/test.yml`, `${from}/test.yml`);
+      }
+
       files.forEach((modelName: string) => {
         const fileContent = fs.readFileSync(`${from}/${modelName}`, 'utf-8');
         const lines = fileContent.split(/\r?\n/);
@@ -142,7 +170,7 @@ const genActions: any = {
     } catch (error) {
       console.error('Error creating workflow file:', error);
     }
-    
+
     console.log('Generate ended')
   }
 }

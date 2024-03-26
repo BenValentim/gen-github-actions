@@ -28,6 +28,10 @@ genActions.generate([
 }
 ], true, true);
 ```
+or
+```bash 
+npx gen-github-actions generate
+```
 
 ## Contribution
 If you encounter any issues or have suggestions for improvement, feel free to open an issue in this repository. We welcome contributions from all levels of experience.
