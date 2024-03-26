@@ -177,5 +177,10 @@ const genActions: any = {
   }
 }
 
-const cliArgs = process.argv.slice(2)
-genActions[cliArgs[0]]();
+const cliArgs = process.argv.slice(2);
+
+if(cliArgs.length > 0){
+  genActions[cliArgs[0]]();
+}
+
+export default genActions;
